@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
 
+import blackHoleHero from "@/assets/black-hole-hero.jpg";
+
 import { useReducedMotion } from "./hooks";
 
 const ROLES = [
@@ -11,7 +13,7 @@ const ROLES = [
   "Builder",
 ];
 
-/** AI Core hero: an orb that tilts and glows toward the pointer. */
+/** Black hole hero: a gravitational core that tilts toward the pointer. */
 export function Hero() {
   const core = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
@@ -43,8 +45,10 @@ export function Hero() {
     <section
       id="top"
       ref={stage}
-      className="on-light relative flex min-h-[100svh] flex-col items-center justify-center px-5 pt-32 pb-20 text-center"
+      className="hero-space relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-5 pt-28 pb-16 text-center"
     >
+      <div aria-hidden="true" className="hero-star-dust absolute inset-0" />
+
       <p className="muted text-[0.65rem] tracking-[0.42em] uppercase sm:text-xs">
         Alwar, Rajasthan &nbsp;•&nbsp; B.Tech @ JECRC Alwar
       </p>
@@ -64,38 +68,24 @@ export function Hero() {
       <div
         ref={core}
         aria-hidden="true"
-        className="relative mt-12 h-52 w-52 transition-transform duration-300 ease-out will-change-transform sm:h-64 sm:w-64"
+        className="black-hole-core relative mt-8 aspect-square w-[min(74vw,25rem)] transition-transform duration-500 ease-out will-change-transform"
       >
-        <div
-          className="absolute inset-0 rounded-full"
-          style={{
-            background:
-              "radial-gradient(circle at 38% 32%, #ffffff 0%, oklch(0.78 0.11 235) 38%, oklch(0.36 0.12 262) 78%, oklch(0.18 0.06 265) 100%)",
-            boxShadow: "0 40px 120px -30px oklch(0.5 0.14 255 / 0.65)",
-            animation: "pulse-core 5s ease-in-out infinite",
-          }}
+        <img
+          src={blackHoleHero}
+          alt=""
+          width={1536}
+          height={1536}
+          decoding="async"
+          fetchPriority="high"
+          className="absolute inset-0 h-full w-full rounded-full object-cover"
         />
-        <div
-          className="absolute -inset-6 rounded-full border border-dashed"
-          style={{
-            borderColor: "oklch(0.5 0.08 255 / 0.35)",
-            animation: "spin-slow 26s linear infinite",
-          }}
-        />
-        <div
-          className="absolute -inset-12 rounded-full border"
-          style={{
-            borderColor: "oklch(0.5 0.08 255 / 0.18)",
-            animation: "spin-slow 44s linear infinite reverse",
-          }}
-        />
+        <div className="black-hole-lens absolute inset-[7%] rounded-full" />
       </div>
 
       <div className="mt-14 flex flex-wrap items-center justify-center gap-3">
         <a
           href="#projects"
-          className="rounded-full px-6 py-3 text-xs tracking-[0.25em] uppercase"
-          style={{ background: "oklch(0.22 0.03 262)", color: "oklch(0.98 0 0)" }}
+          className="bg-foreground text-background rounded-full px-6 py-3 text-xs tracking-[0.25em] uppercase"
         >
           Explore Missions
         </a>
