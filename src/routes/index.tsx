@@ -4,7 +4,7 @@ import { BootLoader } from "@/components/space/BootLoader";
 import { Hero } from "@/components/space/Hero";
 import { Nav } from "@/components/space/Nav";
 import { OrbCursor } from "@/components/space/OrbCursor";
-import { Starfield } from "@/components/space/Starfield";
+import { SpaceScene } from "@/components/space/SpaceScene";
 import {
   About,
   Certifications,
@@ -21,6 +21,7 @@ const DESCRIPTION =
   "Portfolio of Gopal Yadav, AI and full stack engineer and B.Tech student at JECRC Alwar, building machine learning and web products from Alwar, Rajasthan.";
 
 export const Route = createFileRoute("/")({
+  ssr: false,
   head: () => ({
     meta: [
       { title: TITLE },
@@ -66,13 +67,7 @@ function Index() {
     <div className="stage relative min-h-screen overflow-x-hidden">
       <BootLoader />
       <OrbCursor />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 -z-10 transition-opacity duration-500"
-        style={{ opacity: Math.min(1, Math.max(0, (progress - 0.25) * 2.4)) }}
-      >
-        <Starfield />
-      </div>
+      <SpaceScene />
 
       <a
         href="#about"
@@ -83,7 +78,7 @@ function Index() {
 
       <Nav />
 
-      <main>
+      <main className="relative z-10">
         <Hero />
         <About />
         <Skills />
@@ -93,7 +88,9 @@ function Index() {
         <Contact />
       </main>
 
-      <Footer />
+      <div className="relative z-10">
+        <Footer />
+      </div>
     </div>
   );
 }

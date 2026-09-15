@@ -86,7 +86,7 @@
   h2,
   h3 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
   }
 
   ::selection {
@@ -175,21 +175,8 @@
   }
 }
 
-/* Scroll color story: white -> light grey -> blue -> dark blue -> deep space -> galaxy black */
 .stage {
-  background:
-    linear-gradient(
-      180deg,
-      oklch(0.99 0 0) 0%,
-      oklch(0.95 0.004 250) 5%,
-      oklch(0.88 0.045 240) 9%,
-      oklch(0.62 0.11 250) 14%,
-      oklch(0.38 0.11 258) 20%,
-      oklch(0.24 0.08 264) 30%,
-      oklch(0.17 0.055 265) 48%,
-      oklch(0.11 0.035 265) 74%,
-      oklch(0.05 0.015 265) 100%
-    );
+  background: linear-gradient(180deg, transparent 0%, oklch(0.08 0.025 262 / 78%) 32%, oklch(0.025 0.008 260 / 96%) 100%);
 }
 
 .on-light {
@@ -201,49 +188,13 @@
 
 .hero-space {
   color: var(--foreground);
-  background:
-    radial-gradient(ellipse at 50% 58%, color-mix(in oklab, var(--ion) 16%, transparent), transparent 44%),
-    linear-gradient(180deg, var(--void) 0%, color-mix(in oklab, var(--background) 92%, black) 100%);
+  background: radial-gradient(ellipse at 50% 45%, transparent 18%, color-mix(in oklab, var(--void) 24%, transparent) 76%);
 }
 
 .hero-space .muted {
   color: var(--muted-foreground);
 }
 
-.hero-star-dust {
-  opacity: 0.82;
-  background-image:
-    radial-gradient(circle, var(--starlight) 0 1px, transparent 1.4px),
-    radial-gradient(circle, color-mix(in oklab, var(--halo) 80%, white) 0 0.7px, transparent 1.1px),
-    radial-gradient(circle, color-mix(in oklab, var(--foreground) 65%, transparent) 0 0.6px, transparent 1px);
-  background-position: 0 0, 37px 51px, 17px 29px;
-  background-size: 113px 127px, 79px 97px, 53px 61px;
-  mask-image: linear-gradient(to bottom, black 0%, black 82%, transparent 100%);
-}
-
-.black-hole-core {
-  filter: drop-shadow(0 0 34px color-mix(in oklab, var(--halo) 22%, transparent));
-}
-
-.black-hole-core img {
-  mask-image: radial-gradient(circle, black 0%, black 64%, transparent 74%);
-  animation: black-hole-breathe 7s ease-in-out infinite;
-}
-
-.black-hole-lens {
-  box-shadow:
-    inset 0 0 24px color-mix(in oklab, var(--starlight) 8%, transparent),
-    0 0 54px color-mix(in oklab, var(--halo) 10%, transparent);
-}
-
-@keyframes black-hole-breathe {
-  0%,
-  100% {
-    transform: scale(1);
-    filter: saturate(0.94) contrast(1.04);
-  }
-  50% {
-    transform: scale(1.025);
-    filter: saturate(1.06) contrast(1.08);
-  }
+.space-canvas {
+  background: var(--void);
 }
