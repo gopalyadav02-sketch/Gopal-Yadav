@@ -59,9 +59,7 @@ function MovingStars({ reduced }: { reduced: boolean }) {
 
 function BlackHole({ reduced }: { reduced: boolean }) {
   const group = useRef<THREE.Group>(null);
-  const outerDisk = useRef<THREE.Mesh>(null);
-  const innerDisk = useRef<THREE.Mesh>(null);
-  const glow = useRef<THREE.Mesh>(null);
+  const material = useRef<THREE.ShaderMaterial>(null);
   const { pointer } = useThree();
 
   useFrame(({ clock }, rawDelta) => {
@@ -70,73 +68,77 @@ function BlackHole({ reduced }: { reduced: boolean }) {
     if (!root) return;
 
     const scroll = window.scrollY / Math.max(window.innerHeight, 1);
-    root.position.y = THREE.MathUtils.damp(root.position.y, scroll * 5.2, 3, delta);
-    root.rotation.y = THREE.MathUtils.damp(root.rotation.y, reduced ? 0.18 : pointer.x * 0.2, 3, delta);
-    root.rotation.x = THREE.MathUtils.damp(root.rotation.x, reduced ? 0.98 : 0.98 - pointer.y * 0.1, 3, delta);
+    root.position.y = THREE.MathUtils.damp(root.position.y, -0.95 + scroll * 5.2, 3, delta);
+    root.rotation.y = THREE.MathUtils.damp(root.rotation.y, reduced ? 0 : pointer.x * 0.055, 3, delta);
+    root.rotation.x = THREE.MathUtils.damp(root.rotation.x, reduced ? -0.03 : -0.03 - pointer.y * 0.04, 3, delta);
 
     if (!reduced) {
-      root.rotation.z += delta * 0.035;
-      if (outerDisk.current) outerDisk.current.rotation.z -= delta * 0.22;
-      if (innerDisk.current) innerDisk.current.rotation.z += delta * 0.34;
-      if (glow.current) {
-        const pulse = 1 + Math.sin(clock.elapsedTime * 0.65) * 0.035;
-        glow.current.scale.setScalar(pulse);
-      }
+      root.rotation.z = Math.sin(clock.elapsedTime * 0.18) * 0.035;
+      if (material.current) material.current.uniforms.uTime.value += delta;
     }
   });
 
   return (
-    <group ref={group} position={[0, -0.55, -3.2]} rotation={[0.98, 0.18, -0.08]}>
-      <mesh ref={glow} renderOrder={0}>
-        <ringGeometry args={[3.05, 4.65, 128]} />
-        <meshBasicMaterial
-          color="#3b79c9"
+    <group ref={group} position={[0, -0.95, -3.2]}>
+      <mesh renderOrder={3}>
+        <planeGeometry args={[11.8, 8.2, 1, 1]} />
+        <shaderMaterial
+          ref={material}
           transparent
-          opacity={0.12}
-          side={THREE.DoubleSide}
           depthWrite={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
+          uniforms={{ uTime: { value: 0 } }}
+          vertexShader={/* glsl */ `
+            varying vec2 vUv;
+            void main() {
+              vUv = uv;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+          `}
+          fragmentShader={/* glsl */ `
+            precision highp float;
+            varying vec2 vUv;
+            uniform float uTime;
 
-      <mesh ref={outerDisk} renderOrder={1}>
-        <ringGeometry args={[2.25, 4.25, 160, 3]} />
-        <meshBasicMaterial
-          color="#e7f3ff"
-          transparent
-          opacity={0.42}
-          side={THREE.DoubleSide}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
+            float hash(vec2 p) {
+              return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+            }
 
-      <mesh ref={innerDisk} position={[0, 0, 0.035]} renderOrder={2}>
-        <ringGeometry args={[1.95, 3.52, 160, 2]} />
-        <meshBasicMaterial
-          color="#78b8ff"
-          transparent
-          opacity={0.72}
-          side={THREE.DoubleSide}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
+            void main() {
+              vec2 p = vUv - 0.5;
+              p.x *= 1.42;
+              float angle = atan(p.y, p.x);
+              float radius = length(p);
+              float coreRadius = 0.165;
 
-      <mesh position={[0, 0, 0.12]} renderOrder={4}>
-        <sphereGeometry args={[2.12, 64, 64]} />
-        <meshBasicMaterial color="#000000" />
-      </mesh>
+              float turbulence = sin(angle * 15.0 - uTime * 1.7 + radius * 46.0) * 0.5 + 0.5;
+              turbulence *= 0.72 + hash(floor(p * 170.0 + uTime * 0.7)) * 0.28;
 
-      <mesh position={[0, 0, 0.16]} renderOrder={5}>
-        <ringGeometry args={[2.08, 2.22, 128]} />
-        <meshBasicMaterial
-          color="#d9efff"
-          transparent
-          opacity={0.72}
-          side={THREE.DoubleSide}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
+              float disk = smoothstep(0.48, 0.22, radius) * smoothstep(coreRadius, 0.205, radius);
+              float streaks = pow(turbulence, 3.0) * disk;
+              float photonRing = exp(-pow((radius - 0.174) * 92.0, 2.0));
+              float outerGlow = exp(-pow((radius - 0.25) * 10.0, 2.0)) * 0.26;
+              float lensArc = exp(-pow((radius - 0.205) * 33.0, 2.0)) * (0.42 + 0.58 * abs(sin(angle)));
+
+              vec3 ice = vec3(0.42, 0.72, 1.0);
+              vec3 whiteHot = vec3(0.93, 0.97, 1.0);
+              vec3 amber = vec3(1.0, 0.48, 0.16);
+              float heat = smoothstep(0.43, 0.17, radius);
+              vec3 diskColor = mix(ice, amber, streaks * 0.5);
+              diskColor = mix(diskColor, whiteHot, heat * 0.72);
+
+              vec3 color = diskColor * (disk * (0.16 + streaks * 1.45));
+              color += whiteHot * photonRing * 1.8;
+              color += ice * lensArc * 0.8;
+              color += ice * outerGlow;
+
+              float core = 1.0 - smoothstep(coreRadius - 0.004, coreRadius + 0.006, radius);
+              color = mix(color, vec3(0.0), core);
+              float alpha = max(max(disk * 0.92, photonRing), max(lensArc * 0.72, outerGlow));
+              alpha = max(alpha, core);
+              alpha *= 1.0 - smoothstep(0.43, 0.54, radius);
+              gl_FragColor = vec4(color, alpha);
+            }
+          `}
         />
       </mesh>
     </group>
