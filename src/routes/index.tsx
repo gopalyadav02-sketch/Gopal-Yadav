@@ -14,7 +14,7 @@ import {
   Projects,
   Skills,
 } from "@/components/space/Sections";
-import { useRevealOnScroll, useScrollProgress } from "@/components/space/hooks";
+import { useRevealOnScroll } from "@/components/space/hooks";
 
 const TITLE = "Gopal Yadav — AI Engineer & Full Stack Developer";
 const DESCRIPTION =
@@ -61,7 +61,6 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   useRevealOnScroll();
-  const progress = useScrollProgress();
 
   return (
     <div className="stage relative min-h-screen overflow-x-hidden">

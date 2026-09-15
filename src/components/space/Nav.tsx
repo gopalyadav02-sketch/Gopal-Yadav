@@ -12,18 +12,6 @@ const LINKS = [
 export function Nav() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("about");
-  const [onLight, setOnLight] = useState(true);
-
-  useEffect(() => {
-    const on = () => setOnLight(window.scrollY < window.innerHeight * 0.75);
-    on();
-    window.addEventListener("scroll", on, { passive: true });
-    window.addEventListener("resize", on);
-    return () => {
-      window.removeEventListener("scroll", on);
-      window.removeEventListener("resize", on);
-    };
-  }, []);
 
   useEffect(() => {
     const io = new IntersectionObserver(
@@ -43,16 +31,11 @@ export function Nav() {
 
   return (
     <header
-      className="fixed inset-x-0 top-4 z-50 px-4 transition-colors duration-500"
-      style={{ color: onLight ? "oklch(0.22 0.03 262)" : "var(--foreground)" }}
+      className="text-foreground fixed inset-x-0 top-4 z-50 px-4"
     >
       <nav
         aria-label="Primary"
-        className="mx-auto flex max-w-5xl items-center gap-4 rounded-full px-4 py-2.5 backdrop-blur-xl transition-colors duration-500 sm:px-6"
-        style={{
-          background: onLight ? "oklch(1 0 0 / 55%)" : "oklch(1 0 0 / 6%)",
-          border: `1px solid ${onLight ? "oklch(0.22 0.03 262 / 12%)" : "oklch(1 0 0 / 14%)"}`,
-        }}
+        className="glass mx-auto flex max-w-5xl items-center gap-4 rounded-full px-4 py-2.5 sm:px-6"
       >
         <a
           href="#top"
@@ -94,11 +77,7 @@ export function Nav() {
       {open && (
         <div
           id="mobile-nav"
-          className="mx-auto mt-2 max-w-5xl rounded-3xl p-3 backdrop-blur-xl md:hidden"
-          style={{
-            background: onLight ? "oklch(1 0 0 / 75%)" : "oklch(0.16 0.03 264 / 85%)",
-            border: `1px solid ${onLight ? "oklch(0.22 0.03 262 / 12%)" : "oklch(1 0 0 / 14%)"}`,
-          }}
+          className="glass mx-auto mt-2 max-w-5xl rounded-3xl p-3 md:hidden"
         >
           <ul className="grid gap-1">
             {LINKS.map((l) => (
