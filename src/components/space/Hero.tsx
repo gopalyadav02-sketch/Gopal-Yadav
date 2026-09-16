@@ -56,6 +56,9 @@ export function Hero() {
         />
       </div>
       <div aria-hidden="true" className="hero-contrast absolute inset-0" />
+      <p className="absolute right-5 bottom-5 z-10 max-w-[12rem] text-right text-[0.52rem] leading-relaxed tracking-[0.28em] text-starlight/60 uppercase sm:right-8 sm:bottom-8 sm:max-w-none sm:text-[0.6rem]">
+        Our Solar System — Black Hole Scenario
+      </p>
 
       <p className="muted relative z-10 text-[0.65rem] tracking-[0.42em] uppercase sm:text-xs">
         Alwar, Rajasthan &nbsp;•&nbsp; B.Tech @ JECRC Alwar
