@@ -1,16 +1,18 @@
 import { useEffect, useRef } from "react";
 
-import solarSystemScene from "@/assets/solar-system-black-hole.jpg";
+import skillSystemScene from "@/assets/black-hole-skill-system.jpg";
 
 import { useReducedMotion } from "./hooks";
 
-const ROLES = [
-  "AI Engineer",
-  "Full Stack Developer",
-  "ML Engineer",
-  "Backend Developer",
-  "Creator",
-  "Builder",
+const SKILL_PLANETS = [
+  { planet: "Mercury", skill: "Python", position: "mercury" },
+  { planet: "Venus", skill: "Machine Learning", position: "venus" },
+  { planet: "Earth", skill: "Artificial Intelligence", position: "earth" },
+  { planet: "Mars", skill: "Data Science", position: "mars" },
+  { planet: "Jupiter", skill: "Deep Learning", position: "jupiter" },
+  { planet: "Saturn", skill: "SQL / Databases", position: "saturn" },
+  { planet: "Uranus", skill: "Generative AI", position: "uranus" },
+  { planet: "Neptune", skill: "n8n / AI Automation", position: "neptune" },
 ];
 
 export function Hero() {
@@ -42,43 +44,49 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="hero-space relative z-10 flex min-h-[100svh] flex-col items-center overflow-hidden px-5 pt-28 pb-10 text-center"
+      className="hero-space relative z-10 flex min-h-[100svh] flex-col overflow-hidden px-5 pt-28 pb-8 sm:px-8 lg:px-12"
     >
       <div ref={scene} aria-hidden="true" className="solar-system-scene absolute inset-0">
         <img
-          src={solarSystemScene}
+          src={skillSystemScene}
           alt=""
-          width={1536}
-          height={1024}
+          width={1920}
+          height={1080}
           decoding="async"
           fetchPriority="high"
           className="h-full w-full object-cover"
         />
       </div>
       <div aria-hidden="true" className="hero-contrast absolute inset-0" />
-      <p className="absolute right-5 bottom-5 z-10 max-w-[12rem] text-right text-[0.52rem] leading-relaxed tracking-[0.28em] text-starlight/60 uppercase sm:right-8 sm:bottom-8 sm:max-w-none sm:text-[0.6rem]">
-        Our Solar System — Black Hole Scenario
-      </p>
+      <div className="hero-copy relative z-20 max-w-xl">
+        <p className="muted text-[0.6rem] tracking-[0.38em] uppercase sm:text-[0.68rem]">
+          Portfolio / 2026
+        </p>
+        <h1 className="font-display text-glow mt-4 text-[clamp(2.8rem,7vw,6.7rem)] leading-[0.88] font-semibold">
+          GOPAL
+          <span className="block">YADAV</span>
+        </h1>
+        <p className="mt-5 text-xs font-medium tracking-[0.32em] text-starlight uppercase sm:text-sm">
+          AI / ML Engineer
+        </p>
+        <p className="muted mt-4 max-w-md text-sm leading-relaxed sm:text-base">
+          Exploring Intelligence Across the Digital Universe.
+        </p>
+      </div>
 
-      <p className="muted relative z-10 text-[0.65rem] tracking-[0.42em] uppercase sm:text-xs">
-        Alwar, Rajasthan &nbsp;•&nbsp; B.Tech @ JECRC Alwar
-      </p>
-
-      <h1 className="font-display text-glow relative z-10 mt-5 text-[clamp(2.6rem,10vw,6.5rem)] leading-[0.95] font-semibold">
-        GOPAL YADAV
-      </h1>
-
-      <ul className="muted relative z-10 mt-5 flex max-w-2xl flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[0.7rem] tracking-[0.22em] uppercase sm:text-xs">
-        {ROLES.map((r) => (
-          <li key={r} className="rounded-full border border-current/20 px-3 py-1">
-            {r}
+      <ul className="skill-constellation absolute inset-0 z-10" aria-label="Technical skills represented by Solar System planets">
+        {SKILL_PLANETS.map(({ planet, skill, position }) => (
+          <li key={planet} className={`skill-label skill-label--${position}`}>
+            <span className="skill-line" aria-hidden="true" />
+            <span className="skill-planet">{planet}</span>
+            <span className="skill-name">{skill}</span>
           </li>
         ))}
       </ul>
 
-      <div aria-hidden="true" className="min-h-[34svh] flex-1 sm:min-h-[40svh]" />
+      <div aria-hidden="true" className="min-h-[43svh] flex-1" />
 
-      <div className="relative z-10 flex flex-wrap items-center justify-center gap-3">
+      <div className="relative z-20 flex flex-wrap items-center gap-3">
         <a
           href="#projects"
           className="bg-foreground text-background rounded-full px-6 py-3 text-xs tracking-[0.25em] uppercase"
@@ -93,9 +101,10 @@ export function Hero() {
         </a>
       </div>
 
-      <p className="muted relative z-10 mt-8 text-[0.6rem] tracking-[0.4em] uppercase">
-        Scroll to launch
-      </p>
+      <div className="relative z-20 mt-7 flex items-center gap-3">
+        <span aria-hidden="true" className="h-px w-8 bg-current opacity-30" />
+        <p className="muted text-[0.56rem] tracking-[0.35em] uppercase">Scroll to explore</p>
+      </div>
     </section>
   );
 }
