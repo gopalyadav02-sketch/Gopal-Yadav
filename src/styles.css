@@ -188,7 +188,7 @@
 
 .hero-space {
   color: var(--foreground);
-  background: radial-gradient(ellipse at 50% 45%, transparent 18%, color-mix(in oklab, var(--void) 24%, transparent) 76%);
+  background: var(--void);
 }
 
 .hero-space .muted {
@@ -197,4 +197,35 @@
 
 .space-canvas {
   background: var(--void);
+}
+
+.solar-system-scene {
+  --scene-x: 0deg;
+  --scene-y: 0deg;
+  --scene-tx: 0px;
+  --scene-ty: 0px;
+  transform: perspective(1400px) rotateY(var(--scene-x)) rotateX(var(--scene-y)) translate3d(var(--scene-tx), var(--scene-ty), 0) scale(1.07);
+  transform-origin: 50% 52%;
+  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: solar-breathe 14s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.solar-system-scene img {
+  filter: saturate(0.88) contrast(1.06) brightness(0.72);
+}
+
+.hero-contrast {
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--void) 72%, transparent) 0%, transparent 30%, transparent 66%, color-mix(in oklab, var(--void) 84%, transparent) 100%),
+    radial-gradient(ellipse at 50% 8%, color-mix(in oklab, var(--void) 64%, transparent), transparent 46%);
+}
+
+@keyframes solar-breathe {
+  from {
+    scale: 1;
+  }
+  to {
+    scale: 1.025;
+  }
 }
